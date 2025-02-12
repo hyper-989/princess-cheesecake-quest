@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { CakeSlice, Crown, Sparkles } from "lucide-react";
+import { CakeSlice, Crown, Sparkles, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -9,6 +9,7 @@ const Index = () => {
   const [attempts, setAttempts] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -24,7 +25,8 @@ const Index = () => {
       toast.error("Please enter your name to begin the magical journey!");
       return;
     }
-    setAttempts(0);
+    setGameStarted(true);
+    toast.success(`Welcome to the magical quest, ${playerName}! ✨`);
   };
 
   const spinWheel = () => {
@@ -41,7 +43,7 @@ const Index = () => {
 
     setTimeout(() => {
       setIsSpinning(false);
-      if (attempts >= 2) { // Third attempt
+      if (attempts >= 2) { // Check before incrementing (third attempt)
         if (playerName.toLowerCase() === "lavanya") {
           setShowForm(true);
           toast.success("✨ Congratulations! You've won the magical cheesecake! ✨");
@@ -49,6 +51,8 @@ const Index = () => {
           toast.error("Thank you for playing! Try again with a different magic name!");
           setTimeout(() => window.location.reload(), 3000);
         }
+      } else {
+        toast("Keep trying! Magic takes time ✨");
       }
     }, 4000);
   };
@@ -60,7 +64,6 @@ const Index = () => {
       return;
     }
     
-    // Save form data (in a real app, this would connect to a backend)
     console.log("Form submitted:", formData);
     toast.success("Your magical cheesecake will be delivered soon! ✨");
     setTimeout(() => window.location.reload(), 3000);
@@ -73,7 +76,36 @@ const Index = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 relative">
+          {/* Add floating hearts animation */}
+          <motion.div
+            className="absolute inset-0 -z-10"
+            initial="initial"
+            animate="animate"
+          >
+            {[...Array(5)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute"
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [1, 0.5, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: i * 0.4,
+                }}
+                style={{
+                  left: `${20 + i * 15}%`,
+                  top: `${50 + (i % 3) * 10}%`,
+                }}
+              >
+                <Heart className="w-6 h-6 text-primary/50" />
+              </motion.div>
+            ))}
+          </motion.div>
+          
           <motion.div
             className="inline-block"
             animate={{ rotate: [0, 10, -10, 0] }}
@@ -85,11 +117,11 @@ const Index = () => {
             The Enchanted Cheesecake Quest
           </h1>
           <p className="text-lg text-muted-foreground">
-            Enter the magical realm where dreams of delicious cheesecake come true!
+            Where every princess deserves a magical slice of happiness! ✨
           </p>
         </div>
 
-        {!playerName && (
+        {!gameStarted && (
           <motion.form
             onSubmit={handleNameSubmit}
             className="glass-card max-w-md mx-auto p-8 rounded-2xl"
@@ -98,7 +130,7 @@ const Index = () => {
           >
             <div className="space-y-4">
               <label className="block text-lg font-medium text-secondary">
-                Your Magical Name
+                Your Royal Name
               </label>
               <input
                 type="text"
@@ -111,20 +143,20 @@ const Index = () => {
                 type="submit"
                 className="w-full py-3 px-6 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
-                Begin Your Quest
+                Begin Your Royal Quest
               </button>
             </div>
           </motion.form>
         )}
 
-        {playerName && !showForm && (
+        {gameStarted && !showForm && (
           <motion.div
             className="glass-card max-w-2xl mx-auto p-8 rounded-2xl"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
           >
             <div className="wheel-container mb-8">
-              <div className="wheel">
+              <div className="wheel glass-card">
                 {[
                   "Try Again!",
                   "So Close!",
@@ -162,7 +194,7 @@ const Index = () => {
               className="w-full py-3 px-6 bg-secondary text-white rounded-lg font-medium hover:bg-secondary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Sparkles className="w-5 h-5" />
-              Spin the Magic Wheel!
+              Cast Your Spinning Spell!
             </button>
           </motion.div>
         )}
@@ -177,17 +209,17 @@ const Index = () => {
             <div className="text-center mb-8">
               <CakeSlice className="w-12 h-12 text-accent mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-secondary">
-                Claim Your Magical Cheesecake!
+                Claim Your Royal Cheesecake!
               </h2>
             </div>
 
             <div className="space-y-4">
               {[
-                { label: "Full Name", key: "name", type: "text" },
-                { label: "Phone Number", key: "phone", type: "tel" },
-                { label: "Email", key: "email", type: "email" },
-                { label: "Delivery Address", key: "address", type: "text" },
-                { label: "How are you feeling?", key: "feeling", type: "text" },
+                { label: "Royal Name", key: "name", type: "text" },
+                { label: "Royal Messenger (Phone)", key: "phone", type: "tel" },
+                { label: "Magic Scroll (Email)", key: "email", type: "email" },
+                { label: "Castle Address", key: "address", type: "text" },
+                { label: "Share Your Joy!", key: "feeling", type: "text" },
               ].map((field) => (
                 <div key={field.key}>
                   <label className="block text-sm font-medium text-secondary mb-1">
@@ -225,7 +257,7 @@ const Index = () => {
                   htmlFor="confirmAddress"
                   className="text-sm text-secondary"
                 >
-                  I confirm my address is correct
+                  I confirm my castle address is correct
                 </label>
               </div>
 
@@ -234,7 +266,7 @@ const Index = () => {
                 className="w-full py-3 px-6 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-5 h-5" />
-                Submit and Receive Your Magic Cheesecake!
+                Send the Royal Baker!
               </button>
             </div>
           </motion.form>
