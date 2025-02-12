@@ -82,7 +82,7 @@ const Index = () => {
       setIsSpinning(false);
       if (attempts >= 2) {
         const normalizedName = playerName.toLowerCase().trim();
-        if (normalizedName === "lavanya") {
+        if (normalizedName.includes("lavanya"))  {
           setShowForm(true);
           triggerConfetti();
           toast.success("✨ Congratulations! You've won the magical cheesecake! ✨");
