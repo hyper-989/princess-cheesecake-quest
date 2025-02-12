@@ -81,7 +81,8 @@ const Index = () => {
     setTimeout(() => {
       setIsSpinning(false);
       if (attempts >= 2) {
-        if (playerName.toLowerCase() === "lavanya") {
+        const normalizedName = playerName.toLowerCase().trim();
+        if (normalizedName === "lavanya") {
           setShowForm(true);
           triggerConfetti();
           toast.success("✨ Congratulations! You've won the magical cheesecake! ✨");
@@ -129,6 +130,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen py-4 md:py-8 px-2 md:px-4 bg-gradient-to-b from-primary/20 to-secondary/20">
+      <div className="fixed inset-0 -z-10 opacity-10">
+        <img 
+          src="/photo-1581091226825-a6a2a5aee158" 
+          alt="Castle"
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -190,33 +199,67 @@ const Index = () => {
         ) : (
           <>
             <div className="text-center mb-8 md:mb-12 relative">
-              <motion.div
-                className="absolute inset-0 -z-10"
-                initial="initial"
-                animate="animate"
-              >
-                {[...Array(5)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute"
-                    animate={{
-                      y: [0, -20, 0],
-                      opacity: [1, 0.5, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: i * 0.4,
-                    }}
-                    style={{
-                      left: `${20 + i * 15}%`,
-                      top: `${50 + (i % 3) * 10}%`,
-                    }}
-                  >
-                    <Heart className="w-6 h-6 text-primary/50" />
-                  </motion.div>
-                ))}
-              </motion.div>
+              <div className="absolute inset-0 -z-10 overflow-hidden">
+                <motion.div
+                  animate={{
+                    y: [0, -10, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                  }}
+                  className="absolute top-1/4 left-1/4 w-32 h-32 opacity-20"
+                >
+                  <img 
+                    src="/photo-1535268647677-300dbf3d78d1" 
+                    alt="Decorative"
+                    className="w-full h-full object-contain"
+                  />
+                </motion.div>
+                <motion.div
+                  animate={{
+                    y: [0, 10, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                  }}
+                  className="absolute top-1/3 right-1/4 w-32 h-32 opacity-20"
+                >
+                  <img 
+                    src="/photo-1501286353178-1ec881214838" 
+                    alt="Decorative"
+                    className="w-full h-full object-contain"
+                  />
+                </motion.div>
+              </div>
+              
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute"
+                  animate={{
+                    y: [0, -20, 0],
+                    opacity: [0.5, 1, 0.5],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 2 + i * 0.2,
+                    repeat: Infinity,
+                    delay: i * 0.3,
+                  }}
+                  style={{
+                    left: `${10 + i * 12}%`,
+                    top: `${20 + (i % 3) * 15}%`,
+                  }}
+                >
+                  <Sparkles className="w-4 h-4 text-accent" />
+                </motion.div>
+              ))}
               
               <motion.div
                 className="inline-block"
@@ -225,7 +268,8 @@ const Index = () => {
               >
                 <Crown className="w-12 h-12 md:w-16 md:h-16 text-accent mx-auto mb-4" />
               </motion.div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-secondary mb-4">
+              
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-secondary mb-4 drop-shadow-lg">
                 The Enchanted Cheesecake Quest
               </h1>
               <p className="text-base md:text-lg text-muted-foreground">
@@ -236,7 +280,7 @@ const Index = () => {
             {!gameStarted && (
               <motion.form
                 onSubmit={handleNameSubmit}
-                className="glass-card max-w-md mx-auto p-6 md:p-8 rounded-2xl"
+                className="glass-card max-w-md mx-auto p-6 md:p-8 rounded-2xl shadow-2xl"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
               >
@@ -248,12 +292,12 @@ const Index = () => {
                     type="text"
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
-                    className="w-full px-4 py-2 rounded-lg border border-primary/50 focus:ring-2 focus:ring-accent focus:outline-none"
+                    className="w-full px-4 py-2 rounded-lg border border-primary/50 focus:ring-2 focus:ring-accent focus:outline-none bg-white/50"
                     placeholder="Enter your name..."
                   />
                   <button
                     type="submit"
-                    className="w-full py-3 px-6 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                    className="w-full py-3 px-6 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors transform hover:scale-105 duration-200 shadow-lg"
                   >
                     Begin Your Royal Quest
                   </button>
