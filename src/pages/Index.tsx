@@ -10,6 +10,7 @@ const Index = () => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [lastDegrees, setLastDegrees] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -35,10 +36,17 @@ const Index = () => {
     setIsSpinning(true);
     setAttempts((prev) => prev + 1);
 
-    const degrees = 1440 + Math.random() * 360; // Spin 4 full rotations + random
+    // Calculate new rotation based on last position
+    const baseRotation = 1440; // 4 full rotations
+    const randomRotation = Math.random() * 360;
+    const totalRotation = baseRotation + randomRotation;
+    
     const wheel = document.querySelector(".wheel") as HTMLElement;
     if (wheel) {
-      wheel.style.transform = `rotate(${degrees}deg)`;
+      // Add to last rotation to maintain continuous spinning
+      const newDegrees = lastDegrees + totalRotation;
+      wheel.style.transform = `rotate(${newDegrees}deg)`;
+      setLastDegrees(newDegrees);
     }
 
     setTimeout(() => {
