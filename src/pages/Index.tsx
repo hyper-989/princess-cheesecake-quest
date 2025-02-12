@@ -118,7 +118,7 @@ const Index = () => {
 
   const handleAdminAccess = (e: React.FormEvent) => {
     e.preventDefault();
-    if (adminPassword === 'admin123') {
+    if (adminPassword === 'meow#098') {
       const storedWinners = JSON.parse(localStorage.getItem('winners') || '[]');
       setWinners(storedWinners);
       setShowWinners(true);
